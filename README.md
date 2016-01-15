@@ -6,5 +6,5 @@
 
 #使用方法：
 见例子
-http://mjixiang.github.io/io.fileupload/index.html
-http://mjixiang.github.io/io.fileupload/exif.html
+<div>http://mjixiang.github.io/io.fileupload/index.html</div>
+<div>http://mjixiang.github.io/io.fileupload/exif.html</div>
