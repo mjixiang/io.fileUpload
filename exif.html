@@ -24,6 +24,7 @@
 
 <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);">
 	<button onclick="up.chooseImage()" style="border:0;background:#876543;padding:10px 15px;color:white;border-radius:3px;margin:20px;">单选图片</button>
+	<span style="color:#888;font-size:12px;">（可拖拽图片到下面选取）</span>
 	<div id="box"></div>
 	<div class="info-box" style="line-height:40px;"></div>
 </div>
@@ -51,7 +52,7 @@
 				$('.info-box').html('非图片文件');
 			}
 		});
-	},filter);
+	},filter,document.getElementById('box'));
 </script>
 
 
