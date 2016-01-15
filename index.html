@@ -1,0 +1,115 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文件上传demo</title>
+<script src="../static/js/jquery-2.1.1.min.js"></script>
+<script src="fileupload.js"></script>
+<!-- 当需要获取照片exif信息时导入 直接文件上传则不需要 -->
+<script src="exif.min.js"></script>
+<style>
+	body{font-size:12px;}
+	.file-items{list-style:none;padding:10px;}
+	.file-error{border:1px solid red;box-shadow:0px 0px 10px red;-webkit-animation:FileError 2s infinite ease-in-out;}
+	.file-items li{display:inline-block;border:1px solid #bbb; color:#369;padding:2px 10px;line-height:20px;margin:5px 5px;background:white;}
+	.file-items li>span:last-child{padding:0 0 0 8px;cursor:pointer;}
+	.file-add{cursor:pointer;font-weight:bold;color:#336699;line-height:30px;display:inline;}
+	
+	.img{width:200;padding:4px;border:1px solid #ccc;vertical-align:top;}
+	
+@-webkit-keyframes FileError{
+	0%{box-shadow:0px 0px 10px red;}
+	50%{box-shadow:0px 0px 0px red;}
+	100%{box-shadow:0px 0px 10px red;}
+}
+</style>
+
+</head>
+
+<body>
+
+<ul class="file-items"></ul>
+
+<button onclick="up.chooseFile()">单选</button>
+<button onclick="up.chooseFiles()">多选</button>
+<button onclick="console.log(up.getFiles());">获取文件</button>
+<button onclick="clearFile()">清空</button>
+<button onclick="up.chooseFile('image/*')">单选图片</button>
+<button onclick="up.chooseImages()">多选图片</button>
+<button onclick="up.chooseFiles('text/html')">多选html</button>
+
+
+<button onclick="up.upload('/test.php','demo[]',{hello:'world'},function(){alert('上传成功')},function(rs){console.log(rs)})">上传</button>
+
+
+<div id="imageBox" style="border:1px solid red;padding:10px;margin:10px;width:70%;"></div>
+<div style="width:200px;line-height:40px;background:#293C55;color:#ccc;padding:0 15px;position:fixed;top:10px;right:10px;font-size:14px;">
+	<div>文件总个数：<span class="file-total-num">0</span></div>
+	<div>待上传文件个数：<span class="file-right-num">0</span></div>
+	<div>文件总大小：<span class="file-total-size">0</span>Kb</div>
+	<div>正确文件总大小：<span class="file-right-size">0</span>Kb</div>
+</div>
+
+<script>
+
+	var box = document.getElementById('imageBox');
+
+	var up = new window.IO.fileUpload();
+	//筛选文件 不符合要求的文件将不会上传
+	var filter = {maxsize:2*1024*1024,type:['image','doc','txt']};
+	console.log(up);
+	up.change(function(file,errormsg){
+		valueChange() //右上角信息
+		var img = up.getImage(file,"img");
+		img && box.appendChild(img);
+		addFile(file,errormsg);
+		up.getImageBaseExif(file,function(rs){
+			console.log(rs || '该文件无exif信息');
+		});	    
+	},filter);
+
+	$('.file-items').on("click",".close",function(){
+		var ix = $(this).attr('data-ix'),_this = this;
+		//删除队列图片
+		up.delete(ix,function(){
+			valueChange() //右上角信息
+			_this.parentNode.remove();
+			$(box).children().each(function(){
+				this.index == ix && this.delete();
+			})
+		});
+	});
+	//清空
+	function clearFile(){
+		//清空所有文件 回调
+		up.clear(function(){
+			valueChange();
+			$('[data-ix]').parent().remove();
+			$('#imageBox').html('');
+		});
+	}
+	function addFile(file,msg){
+		if(msg){
+			$(".file-items").append('<li class="file-error" title="错误信息:'+msg+'\n文件大小：'+(file.size/1024).toFixed(2)+'Kb"><span>'+file.name+'</span><span class="close" data-ix='+file.index+'>×</span></li>');
+		}else{
+			$(".file-items").append('<li title="文件大小：'+(file.size/1024).toFixed(2)+'Kb"><span>'+file.name+'</span><span class="close" data-ix='+file.index+'>×</span></li>');
+		}
+	}
+	function valueChange(){
+		$('.file-total-num').html(up.getFiles().length);
+		$('.file-right-num').html(up.getFiles(true).length);
+		$('.file-total-size').html((up.getSize(false)/1024).toFixed(2));
+		$('.file-right-size').html((up.getSize(true)/1024).toFixed(2));
+	}
+
+	window.onerror = function(x,y,z){
+		alert(x);
+		alert(y);
+		alert(z);
+	}
+</script>
+
+
+</body>
+</html>
