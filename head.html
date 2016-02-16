@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>头像上传示例</title>
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="fileupload.js"></script>
+	<style>
+		.btn{display:inline-block;background:#3399FF;padding: 5px 15px;border-radius: 3px;cursor: pointer;margin: 6px 10px;color: white;text-decoration: none;}
+		.head-box{height:200px;width:200px;border:1px dashed #999;display: flex;justify-content: center;align-items: center;}
+		.head-box>img{max-height:200px;max-width:200px;}
+	</style>
+</head>
+<body>
+	<div class="btn chooseImg">选择图片</div>
+	<div class="head-box"></div>
+	<div class="btn upload-btn">上传</div>
+	<script>
+		var headUpload = new window.IO.fileUpload(true);
+		$('.chooseImg').click(function(){
+			headUpload.chooseImage();
+		});
+		//筛选文件 不符合要求的文件将不会上传
+		var filter = {maxsize:2*1024*1024,type:['image']};
+
+		headUpload.change(function(file,errormsg){
+			headUpload.getImageSrc(file,function(src){
+				$('.head-box').html('<image src="'+src+'">');
+			});
+		},filter,$('.head-box')[0]);
+
+		$('.upload-btn').click(function(){
+			var url = '上传的URL';
+			headUpload.upload(url,'upload',{},function(rs){
+				alert('上传成功')
+			},function(rs){
+				alert('上传失败')
+			})
+		})
+		
+	</script>
+</body>
+</html>

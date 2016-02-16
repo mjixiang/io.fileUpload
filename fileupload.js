@@ -236,7 +236,7 @@
 		this.getImageSrc = function(file,callback){
 			file = file.index ? file : this.getFile(file);
 			if(!file || file.type.indexOf('image')!=0){
-				callback(null);
+				callback && callback(null);
 			}
 			if(window.URL){
 				callback(window.URL.createObjectURL(file));
@@ -244,10 +244,10 @@
 				var reader = new FileReader();
 				reader.readAsDataURL(file);
 				reader.onload = function(e){
-					callback(this.result);
+					callback && callback(this.result);
 				}
 			}else{
-				callback(null);
+				callback && callback(null);
 			}
 		}
 		this.getImageBase64 = function(file,callback){
@@ -259,7 +259,7 @@
 				var reader = new FileReader();
 				reader.readAsDataURL(file);
 				reader.onload = function(e){
-					callback(this.result);
+					callback && callback(this.result);
 				}
 			}else{
 				return null;
