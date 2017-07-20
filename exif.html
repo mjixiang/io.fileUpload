@@ -3,30 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>文件上传demo</title>
+<title>查看图片信息</title>
 <script src="jquery-2.1.1.min.js"></script>
 <script src="fileupload.js"></script>
 <!-- 当需要获取照片exif信息时导入 直接文件上传则不需要 -->
 <script src="exif.min.js"></script>
 <style>
 	body{padding:0;margin:0;}
-	#box{height:400px;width:400px;border-radius:8px;border:5px #888 dashed;display: flex;justify-content: center;align-items: center;}
-	#box>img{max-height:400px;max-width:400px;}
+	#box{height:300px;width:300px;border-radius:8px;border:5px #ccc dashed;display: flex;justify-content: center;align-items: center;color: #ccc;font-size:100px;}
+	#box>img{max-height:300px;max-width:300px;}
 </style>
 </head>
 
 <body>
-<blockquote style="padding:10px;border-left:5px solid #888;background:#eee;">
-    <p>需求：选择一个存在exif的照片，并在地图上显示</p>
-    <p>科普：Exif是英文ExchangeableImageFile(可交换图像文件)的缩写</p>
-    <p>比如手机或相机拍照保存了GPS信息，拍摄时间，等等一系列信息的照片</p>
-</blockquote>
-
+<div style="background-color:#232323;color:white;padding:10 14px;font-size: 12px;line-height:20px;">选择手机或单反拍摄含有exif的图片,在地图中查看</div>
 <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);">
-	<button onclick="up.chooseImage()" style="border:0;background:#876543;padding:10px 15px;color:white;border-radius:3px;margin:20px;">单选图片</button>
-	<span style="color:#888;font-size:12px;">（可拖拽图片到下面选取）</span>
-	<div id="box"></div>
-	<div class="info-box" style="line-height:40px;"></div>
+	<div onclick="up.chooseImage()" id="box">＋</div>
+	<div class="info-box" style="line-height:40px;font-size:14px;color:#666;"></div>
 </div>
 
 <script>
@@ -38,12 +31,11 @@
 		//得到图片临时路径 优先blob: 其次base64
 		up.getImageSrc(file,function(src){
 			if(src){
-				console.log(src);
 				$('#box').html('<img src="'+src+'"/>');
-				up.getImageBaseExif(file,function(rs){
+				up.getImageBaseExif(file, function(rs){
 					console.log(rs || '该文件无exif信息');
 					if(rs){
-						$('.info-box').html('该图片存在exif信息<a target="_blank" href=/leaflet/piclocation.html?latitude='+rs.latitude+'&longitude='+rs.longitude+'&blob='+src+'>在地图中显示</a>');
+						$('.info-box').html('该图片存在exif信息<a style="color:#0366d6" target="_blank" href=/leaflet/piclocation.html?lat='+rs.latitude+'&lng='+rs.longitude+'&img='+src+'&time='+encodeURIComponent(rs.photo_at)+'>在地图中显示</a>');
 					}else{
 						$('.info-box').html('该图片不存在exif信息');
 					}
