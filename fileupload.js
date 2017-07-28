@@ -273,10 +273,12 @@
 				return;
 			}
 			EXIF.getData(file, function() {
-				var obj ={name:file.name || '',photo_at:'',latitude:'',longitude:''};
+				var obj ={name:file.name || '',photo_at:'',latitude:'',longitude:'', width: '', height: ''};
 				var lngExif = this.exifdata.GPSLongitude;
 				var latExif = this.exifdata.GPSLatitude;
 				obj.photo_at = this.exifdata.DateTimeOriginal;
+				obj.width = this.exifdata.PixelXDimension
+				obj.height = this.exifdata.PixelYDimension
 				if(!obj.photo_at){
 					callback && callback(null);
 					return;

@@ -35,7 +35,7 @@
 				up.getImageBaseExif(file, function(rs){
 					console.log(rs || '该文件无exif信息');
 					if(rs){
-						$('.info-box').html('该图片存在exif信息<a style="color:#0366d6" target="_blank" href=/leaflet/piclocation.html?lat='+rs.latitude+'&lng='+rs.longitude+'&img='+src+'&time='+encodeURIComponent(rs.photo_at)+'>在地图中显示</a>');
+						$('.info-box').html('该图片存在exif信息<a style="color:#0366d6" target="_blank" href=/leaflet/piclocation.html?lat='+rs.latitude+'&lng='+rs.longitude+'&img='+src+'&time='+encodeURIComponent(rs.photo_at)+'&width='+rs.width+'&height='+rs.height+'>在地图中显示</a>');
 					}else{
 						$('.info-box').html('该图片不存在exif信息');
 					}
